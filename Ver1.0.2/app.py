@@ -27,31 +27,31 @@ numbmodel = load_model('model/su_adamax.h5')
 print("Loaded model from disk")
 
 
-# crop_img 엉키지 않게
-class Microsecond(object):
-    def __init__(self):
-        dt = datetime.now()
-        self.microsecond = dt.microsecond
+# # crop_img 엉키지 않게
+# class Microsecond(object):
+#     def __init__(self):
+#         dt = datetime.now()
+#         self.microsecond = dt.microsecond
 
     
-    def get_path_name(self):
-        return 'model/' + str(self.microsecond)
+#     def get_path_name(self):
+#         return 'model/' + str(self.microsecond)
 
-crop_img_origin_path = Microsecond()
-default_img = cv2.imread('model/crop_img.jpg')
+# crop_img_origin_path = Microsecond()
+# default_img = cv2.imread('model/crop_img.jpg')
 
-# 새로운 폴더 만들기!
-try:
-    if not(os.path.isdir(crop_img_origin_path.get_path_name())):
-        os.makedirs(os.path.join(crop_img_origin_path.get_path_name()))
-except OSError as e:
-    if e.errno != errno.EEXIST:
-        print("Failed to create directory!!!!!")
-        raise
+# # 새로운 폴더 만들기!
+# try:
+#     if not(os.path.isdir(crop_img_origin_path.get_path_name())):
+#         os.makedirs(os.path.join(crop_img_origin_path.get_path_name()))
+# except OSError as e:
+#     if e.errno != errno.EEXIST:
+#         print("Failed to create directory!!!!!")
+#         raise
 
-# make directory
-origin_path = crop_img_origin_path.get_path_name() + '/crop_img.jpg'
-cv2.imwrite(origin_path, default_img)
+# # make directory
+# origin_path = crop_img_origin_path.get_path_name() + '/crop_img.jpg'
+# cv2.imwrite(origin_path, default_img)
     
 class Models:
     def __init__(self,label,letter_list):
@@ -142,11 +142,11 @@ def get_locale():
     return request.accept_languages.best_match(['en', 'ko'])
 
 
-def get_alphabet_list():
-    alphabet_list = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'l', 'm', 'n', 'o',
-                     'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y']
+# def get_alphabet_list():
+#     alphabet_list = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'l', 'm', 'n', 'o',
+#                      'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y']
 
-    return alphabet_list
+#     return alphabet_list
 
 
 
@@ -165,14 +165,20 @@ def gen(camera,group):
         if success:
             try:
                 
-                # cv2.rectangle(img, (250,250), (600,600), (000,51,51), 2)
+                cv2.rectangle(img, (250,250), (600,600), (000,51,51), 2)
 
                 crop_img = img[250:600, 250:600]
-                crop_img_path = crop_img_origin_path.get_path_name() + '/crop_img.jpg'
-                cv2.imwrite(crop_img_path, crop_img)
+                # crop_img_path = crop_img_origin_path.get_path_name() + '/crop_img.jpg'
+                # cv2.imwrite(crop_img_path, img)
+                
+                
+                image=cv2.resize(crop_img, (64, 64))
+                # print(image.shape)
 
-                image = load_img(crop_img_path, target_size=(64,64))
-                image = img_to_array(image)
+                # image = load_img(crop_img_path, target_size=(64,64))
+
+                # image = img_to_array(image)
+                # print(image.shape)
                 image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
                 global sess
                 global graph
@@ -181,8 +187,12 @@ def gen(camera,group):
                     prediction = model.predict(image)
 
                 target_idx_for_predict = target_idx.get_idx()
-                print("타겟예측: ", prediction[0][target_idx_for_predict])
+                # print("타겟예측: ", prediction[0][target_idx_for_predict])
+                print(get_model(group).get_label(target_idx_for_predict))
 
+                print(prediction[0])
+                print(np.argmax(prediction[0]))                
+                # print(get_model(group).get_label(np.argmax(prediction[0])))
                 if np.argmax(prediction[0]) == 1:
                     result = get_model(group).get_label(np.argmax(prediction[0]))
 
@@ -192,17 +202,18 @@ def gen(camera,group):
                     result = ''
 
                 predict_label.set_label(result)
-                print("===gen===start")
-                print(result)
-                print(predict_label.get_label())
-                print("===gen===end")
+                # print("===gen===start")
+                # print(result)
+                # print(predict_label.get_label())
+                # print("===gen===end")
+                # print("\n")
                 ret, jpeg = cv2.imencode('.jpg', crop_img)
                 frame = jpeg.tobytes()
 
                 yield (b'--frame\r\n'
                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
-            except:
-                print("An exception occurred")
+            except Exception as e:
+                print("An exception occurred",e)
 
         else:
             print("Status of camera.read()\n", success, "\n=======================")
@@ -260,7 +271,7 @@ def return_label():
     tem = label_list.index(value)
     print(tem)
     print("label")
-    # idx = target_idx.set_idx(tem)
+    idx = target_idx.set_idx(tem)
     # print(idx)
     label = " " + predict_label.get_label() + " "
     print(label)
