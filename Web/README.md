@@ -1,3 +1,0 @@
-# Handlang
-
-## DSC Ewha
