@@ -50,24 +50,24 @@
                     <a class="nav-link active text-light" href="{{ url_for('index') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active text-light" href="{{url_for('practice_list', group='alphabet')}}">{{_('nav_aslPractice')}}</a>
+                    <a class="nav-link active text-light" href="{{url_for('main.practice_list', group='alphabet')}}">{{_('nav_aslPractice')}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active text-light" href="{{url_for('quiz', group='alphabet')}}">{{_('nav_quiz')}}</a>
+                    <a class="nav-link active text-light" href="{{url_for('quiz.quiz', group='alphabet')}}">{{_('nav_quiz')}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active text-light" href="{{url_for('practice_list', group='number')}}">{{_('nav_numberPractice')}}</a>
+                    <a class="nav-link active text-light" href="{{url_for('main.practice_list', group='number')}}">{{_('nav_numberPractice')}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active text-light" href="{{url_for('quiz',group='number')}}">{{_('nav_number_quiz')}}</a>
+                    <a class="nav-link active text-light" href="{{url_for('quiz.quiz',group='number')}}">{{_('nav_number_quiz')}}</a>
                 </li>
              
     
 
                
                 <li class="nav-item d-flex align-items-center text-secondary">
-                    <a  class="text-secondary" href="{{ url_for('english', link=link) }}" style="margin-right:3px;">English </a>|
-                    <a class="text-secondary" href="{{ url_for('korean', link=link) }}" style="margin-left:3px;"> 한국어</a>
+                    <a  class="text-secondary" href="{{ url_for('language.english', link=link) }}" style="margin-right:3px;">English </a>|
+                    <a class="text-secondary" href="{{ url_for('language.korean', link=link) }}" style="margin-left:3px;"> 한국어</a>
                 </li>
                 
             </ul>
