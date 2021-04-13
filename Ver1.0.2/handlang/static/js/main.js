@@ -34,36 +34,7 @@ $(document).ready(function()  {
 
 });
 
-function en(){
-	console.log('en!');
-    $.ajax({
-      url: '/en',
-      type: 'get', 
-      data: {
-		"lang_code": "en"
-	},
-	  dataType: 'JSON',
-	  success:function(){
-		console.log('success!');
-	}
-    });
 
-}
-function ko(){
-	console.log('ko!');
-    $.ajax({
-      url: '/ko',
-      type: 'get', 
-      data: {
-		"lang_code": "ko"
-	},
-	  dataType: 'JSON',
-	  success:function(){
-		console.log('success!');
-	}
-    });
-
-}
 function ajax_prediction(save_langcode){
 	console.log('ajax!');
     $.ajax({

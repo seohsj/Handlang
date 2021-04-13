@@ -24,8 +24,6 @@ numbmodel = load_model('handlang/model/su_adamax.h5')
 
 print("Loaded model from disk")
 
-
-# ** 전역변수 대신 클래스 객체 사용
 class PredictLabel(object):
     def __init__(self, label):
         self.label = label
@@ -197,3 +195,5 @@ def getNextPrevTopic(group,element):
     if idx_now != 0:
         previous_topic = letter_list[idx_now - 1]
     return next_topic, previous_topic
+
+    
