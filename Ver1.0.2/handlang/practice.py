@@ -1,23 +1,17 @@
-from flask import url_for, render_template, Response, request, redirect, g, session
+from flask import render_template, Response, request, redirect, g, session
 from keras.preprocessing.image import load_img, img_to_array
 from keras.models import load_model
 import numpy as np
 import cv2
 import json
-import random
 from flask_babel import Babel, gettext
-from datetime import datetime
-import os
 import tensorflow as tf
 from tensorflow.python.keras.backend import set_session
 from flask import Blueprint
-bp = Blueprint('main', __name__, url_prefix='/')
-
-# app = Flask(__name__)
-# babel = Babel(app)
 
 
-# app.config['lang_code'] = ['en', 'ko']
+bp = Blueprint('practice', __name__, url_prefix='/')
+
 
 sess = tf.Session()
 graph = tf.get_default_graph()
@@ -278,32 +272,11 @@ def return_label2():
     json_data = json.dumps(predict_result)  # json 형태로 바꿔줘야 에러 안남
     return json_data
 
-# # for ajax
-# @bp.route('/english')
-# def english():
-#     session['language'] = 'en'
-#     link = request.args.get('link')
-#     if link:
-#         return redirect(link)
-#     else:
-#         return redirect('/')
-
-
-# # for ajax
-# @bp.route('/korean')
-# def korean():
-#     session['language'] = 'ko'
-#     link = request.args.get('link')
-#     if link:
-#         return redirect(link)
-#     else:
-#         return redirect('/')
-
 
 @bp.route('/<group>')
 def practice_list(group):
     alphabet_list = get_model(group).get_letter_list()
-    return render_template('practice_list.html',group=group , alphabet_list=alphabet_list, link=request.full_path)
+    return render_template('practice/practice_list.html',group=group , alphabet_list=alphabet_list, link=request.full_path)
 
 
 # # video streaming
@@ -331,26 +304,10 @@ def practice(group):
 
     next_topic, previous_topic = get_model(group).letter_list_idx(element)
 
-    return render_template('practice.html',group=group,alphabet=alphabet, img=img, previous_topic=previous_topic,
+    return render_template('practice/practice_model.html',group=group,alphabet=alphabet, img=img, previous_topic=previous_topic,
                            next_topic=next_topic, link=request.full_path)
 
 
-# @app.route('/aboutUs')
-# def aboutUs():
-#     return render_template('aboutUs.html', link=request.full_path)
-
-
-# @app.route('/')
-# def index():
-#     if session.get('language') is None:
-#         session['language'] = 'ko'
-#     return render_template('index.html', link=request.full_path)
-
-
-# if __name__ == "__main__":  
-#     app.secret_key = 'super secret key'
-#     app.config['SESSION_TYPE'] = 'filesystem'
-#     app.run(host='0.0.0.0', port=5000, debug=True)
 
 #___name__은 모듈의 이름이 저장되는 변수이며 import로 모듈을 가져왔을 때 모듈의 이름이 들어갑니다 파이썬 인터프리터로 스크립트 파일을 직접 실행했을 때는 모듈의 이름이 아니라 '__main__'이 들어갑 
 #__name__은 모듈의 이름이 저장되는 변수이다. 

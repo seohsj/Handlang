@@ -1,10 +1,8 @@
 from flask import  request, redirect, session
-from keras.models import load_model
 from flask import Blueprint
 
+
 bp = Blueprint('language', __name__, url_prefix='/')
-
-
 
 @bp.route('/english')
 def english():

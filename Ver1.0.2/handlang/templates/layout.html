@@ -43,20 +43,20 @@
          
   
         <nav class="navbar navbar-dark bg-dark">
-            <a class="navbar-brand" href="{{ url_for('index') }}">{{_('handlang_title')}}👋</a>
+            <a class="navbar-brand" href="{{ url_for('home.index') }}">{{_('handlang_title')}}👋</a>
           
             <ul class="nav justify-content-end">
                 <li class="nav-item">
-                    <a class="nav-link active text-light" href="{{ url_for('index') }}">Home</a>
+                    <a class="nav-link active text-light" href="{{ url_for('home.index') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active text-light" href="{{url_for('main.practice_list', group='alphabet')}}">{{_('nav_aslPractice')}}</a>
+                    <a class="nav-link active text-light" href="{{url_for('practice.practice_list', group='alphabet')}}">{{_('nav_aslPractice')}}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active text-light" href="{{url_for('quiz.quiz', group='alphabet')}}">{{_('nav_quiz')}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active text-light" href="{{url_for('main.practice_list', group='number')}}">{{_('nav_numberPractice')}}</a>
+                    <a class="nav-link active text-light" href="{{url_for('practice.practice_list', group='number')}}">{{_('nav_numberPractice')}}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active text-light" href="{{url_for('quiz.quiz',group='number')}}">{{_('nav_number_quiz')}}</a>

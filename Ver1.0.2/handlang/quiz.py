@@ -1,7 +1,8 @@
-from flask import url_for, render_template, request, redirect, session
+from flask import url_for, render_template, request, redirect
 import json
 import random
 from flask import Blueprint
+
 
 bp = Blueprint('quiz', __name__, url_prefix='/quiz')
 
@@ -96,16 +97,13 @@ def is_valid_quiz(answer, question_list):
         return True
 
 
-
-# @bp.route('/quiz/<group>', methods=['GET', 'POST'])
-
 @bp.route('/<group>', methods=['GET', 'POST'])
 def quiz(group):
     if request.method == 'GET':
         language_model=get_model(group)
         question_list, img_list = make_quiz(language_model)
         print(question_list)
-        return render_template('quiz.html',group=group, str=str, enumerate=enumerate, question_list=question_list,
+        return render_template('quiz/question.html',group=group, str=str, enumerate=enumerate, question_list=question_list,
                                img_list=img_list, total_q=total_q, link=request.full_path)
 
     if request.method == 'POST':
@@ -121,8 +119,6 @@ def quiz(group):
 
         return redirect(url_for('quiz.quiz_result',group=group, user_answers=user_answers))
 
-
-# @bp.route('/quiz/<group>/result')
 
 @bp.route('/<group>/result')
 def quiz_result(group):
@@ -147,6 +143,6 @@ def quiz_result(group):
     else:
         img_path = "score_0.png"
     print(img_path)
-    return render_template('result.html', group=group,correct_num=correct_num, incorrect_questions=incorrect_questions,
+    return render_template('quiz/result.html', group=group,correct_num=correct_num, incorrect_questions=incorrect_questions,
                            total_q=total_q, img_path=img_path, link=request.full_path)
 

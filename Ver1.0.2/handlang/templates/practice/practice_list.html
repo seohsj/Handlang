@@ -17,7 +17,7 @@
 		<h3 class="card-title">{{ alphabet }}</h3>
 		{% endif %}
 
-	    <a href="{{ url_for('practice',group=group ,element=alphabet) }}" class="btn btn-primary text-center">{{_('go_practice')}}</a>
+	    <a href="{{ url_for('practice.practice',group=group ,element=alphabet) }}" class="btn btn-primary text-center">{{_('go_practice')}}</a>
 	  </div>
 	</div>
 	{% endfor %}
