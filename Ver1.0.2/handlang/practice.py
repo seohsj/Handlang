@@ -8,6 +8,7 @@ from flask_babel import Babel, gettext
 import tensorflow as tf
 from tensorflow.python.keras.backend import set_session
 from flask import Blueprint
+from .common import SignLanguage
 
 
 bp = Blueprint('practice', __name__, url_prefix='/')
@@ -36,23 +37,20 @@ class Models:
         #     "R", "S", "T", "U", "V", "W", "X", "Y",
         #     "del", "nothing", "space"]
         return self.__label[idx]
-    def get_letter_list(self):
-        # alphabet_list = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'l', 'm', 'n', 'o',
-        #              'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y']
-        return self.__letter_list
-    def letter_list_idx(self,element):
-        next_topic = ""
-        previous_topic = ""
-        letter_list=self.__letter_list
-        list_idx_end = len(letter_list) - 1  # 마지막 인덱스
-        idx_now = letter_list.index(element)
-        if idx_now == list_idx_end:
-            next_topic = letter_list[0]
-        else:
-            next_topic = letter_list[idx_now + 1]
-        if idx_now != 0:
-            previous_topic = letter_list[idx_now - 1]
-        return next_topic, previous_topic
+
+    # def letter_list_idx(self,element):
+    #     next_topic = ""
+    #     previous_topic = ""
+    #     letter_list=self.__letter_list
+    #     list_idx_end = len(letter_list) - 1  # 마지막 인덱스
+    #     idx_now = letter_list.index(element)
+    #     if idx_now == list_idx_end:
+    #         next_topic = letter_list[0]
+    #     else:
+    #         next_topic = letter_list[idx_now + 1]
+    #     if idx_now != 0:
+    #         previous_topic = letter_list[idx_now - 1]
+    #     return next_topic, previous_topic
 alphabet_label=["A", "B", "C", "D", "E", "F", "G",
              "H", "I", "K", "L", "M", "N", "O", "P", "Q",
             "R", "S", "T", "U", "V", "W", "X", "Y",
@@ -275,7 +273,7 @@ def return_label2():
 
 @bp.route('/<group>')
 def practice_list(group):
-    alphabet_list = get_model(group).get_letter_list()
+    alphabet_list = SignLanguage.get_letter_list(group)
     return render_template('practice/practice_list.html',group=group , alphabet_list=alphabet_list, link=request.full_path)
 
 
@@ -302,16 +300,23 @@ def practice(group):
 
     img = "../static/img/asl_" + element + ".png"
 
-    next_topic, previous_topic = get_model(group).letter_list_idx(element)
+    next_topic, previous_topic = getNextPrevTopic(group, element)
 
     return render_template('practice/practice_model.html',group=group,alphabet=alphabet, img=img, previous_topic=previous_topic,
                            next_topic=next_topic, link=request.full_path)
 
 
 
-#___name__은 모듈의 이름이 저장되는 변수이며 import로 모듈을 가져왔을 때 모듈의 이름이 들어갑니다 파이썬 인터프리터로 스크립트 파일을 직접 실행했을 때는 모듈의 이름이 아니라 '__main__'이 들어갑 
-#__name__은 모듈의 이름이 저장되는 변수이다. 
-#만약 hello.py가 있고, bye.py가 있다고 하자. 둘다 __name__을 출력하는 코드가 있다.
-#hello.py에 import by를 해준다.
-#그리고 hello.py를 실행시킨다.
-#그러면 hello.py의 __name__은 __main__ 이고, bye.py의 __name__은 bye
+def getNextPrevTopic(group,element):
+    next_topic = ""
+    previous_topic = ""
+    letter_list = SignLanguage.get_letter_list(group)
+    list_idx_end = len(letter_list) - 1  # 마지막 인덱스
+    idx_now = letter_list.index(element)
+    if idx_now == list_idx_end:
+        next_topic = letter_list[0]
+    else:
+        next_topic = letter_list[idx_now + 1]
+    if idx_now != 0:
+        previous_topic = letter_list[idx_now - 1]
+    return next_topic, previous_topic
