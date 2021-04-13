@@ -13,33 +13,16 @@ $(document).ready(function()  {
 			console.log('엔터!');
 
 			timer = setInterval(function(){
-				if($('#category').hasClass('alphabet')) {
-					// console.log(windowLoc)
+				ajax_prediction(function (lang_code) {
+					if (lang_code == "en") {
+						$("#predict_status").text("🔆 Predicting... 🔆");
 
-					ajax_prediction(function (lang_code) {
-						if (lang_code == "en") {
-							$("#predict_status").text("🔆 Predicting... 🔆");
+					} else if (lang_code == "ko") {
+						$("#predict_status").text("🔆 예측중... 🔆");
 
-						} else if (lang_code == "ko") {
-							$("#predict_status").text("🔆 예측중... 🔆");
+					}
 
-						}
-
-					});
-				}
-				else if($('#category').hasClass('number')){
-
-					ajax_prediction2(function (lang_code) {
-						if (lang_code == "en") {
-							$("#predict_status").text("🔆 Predicting... 🔆");
-
-						} else if (lang_code == "ko") {
-							$("#predict_status").text("🔆 예측중... 🔆");
-
-						}
-
-					});
-				}
+				});	
 
 			}, 1000);
 
@@ -115,39 +98,6 @@ function ajax_prediction(save_langcode){
 
 }
 
-function ajax_prediction2(save_langcode){
-	console.log('ajax!');
-    $.ajax({
-      url: '/return_label2',
-      type: 'POST', 
-      data: {
-      	target: number
-      },
-      dataType: 'JSON',
-      success: function(result){
-		save_langcode(result.lang_code);
-      	console.log(result);
-		  $("#predict-in").text(result.info + result.label);
-      	if(result.status === 0) {
-      		correct = 0;
-      	}
-      	else	{
-      		correct++;
-      		console.log("플러스");
-      		if(correct === 3)	{
-      			check_correct(result.lang_code);
-      			correct = 0;
-      		}
-		}
- 
-	  
-	},
-      error: function(xtr, status, error){
-      	console.log(xtr+":"+status+":"+error);
-      }
-    });
-
-}
 
 function check_correct(lang_code)	{
 	total_correct++;
@@ -247,3 +197,4 @@ $(document).ready(function(){
 	});
 
 });
+

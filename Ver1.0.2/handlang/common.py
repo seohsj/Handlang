@@ -2,8 +2,8 @@ class SignLanguage:
 
     #알파벳 모델 라벨 리스트
     _alphabet_label_list=["A", "B", "C", "D", "E", "F", "G",
-             "H", "I", "K", "L", "M", "N", "O", "P", "Q",
-            "R", "S", "T", "U", "V", "W", "X", "Y",
+             "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
+            "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
             "del", "nothing", "space"]
     #실제 사이트에서 사용할 지문자 리스트
     __alphabet_letter_list=['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'l', 'm', 'n', 'o',
@@ -24,6 +24,20 @@ class SignLanguage:
                  ret=cls._alphabet_label_list[idx]
             elif group=="number":
                 ret=cls._number_label_list[idx]
+            else:
+                raise Exception('잘못된 group 입니다.')
+        except IndexError as e:
+            print(e)
+        return ret
+
+        
+    @classmethod
+    def get_label_idx(cls, group ,label):
+        try:
+            if group=="alphabet":
+                 ret=cls._alphabet_label_list.index(label)
+            elif group=="number":
+                ret=cls._number_label_list.index(label)
             else:
                 raise Exception('잘못된 group 입니다.')
         except IndexError as e:
