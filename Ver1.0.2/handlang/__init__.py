@@ -5,7 +5,7 @@ def create_app():
     app = Flask(__name__)
     babel = Babel(app)
     app.config['lang_code'] = ['en', 'ko']
-    app.secret_key = 'super secret key'
+    app.secret_key = 'super secret key' #csrf?
     app.config['SESSION_TYPE'] = 'filesystem'
 
 

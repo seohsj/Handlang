@@ -12,8 +12,8 @@ from .common import SignLanguage
 
 
 bp = Blueprint('practice', __name__, url_prefix='/')
-
-
+# An exception occurred Tensor Tensor("dense_2/Softmax:0", shape=(?, 29), dtype=float32) is not an element of this graph.
+# https://stackoverflow.com/questions/53391618/tensor-tensorpredictions-softmax0-shape-1000-dtype-float32-is-not-an
 sess = tf.Session()
 graph = tf.get_default_graph()
 
@@ -70,8 +70,6 @@ def gen(camera,group,target_idx_for_predict):
                 with graph.as_default():
                     set_session(sess)
                     prediction = model.predict(image)
-
-                # target_idx_for_predict = target_idx.get_idx()
                 print("타겟예측: ", prediction[0][target_idx_for_predict])
                 print("target_idx_for_predict",target_idx_for_predict)
                 print(prediction[0])

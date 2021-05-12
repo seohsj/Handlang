@@ -5,7 +5,7 @@
 
     <div class="container">
         
-        <form id="quizform" action="/quiz/{{group}}" method="post">
+        <form id="quizform" action="{{ url_for('quiz._list', group=group)}}" method="post">
             {% for idx, key in enumerate(question_list) %}
                 {% if idx==0 %}
                     <div id={{idx}}>
@@ -69,17 +69,11 @@
     </div>
 </div>
     
-
     <!-- 뒤로가기 누를 때 reload -->
 <script>
-
-
-
-
     window.addEventListener( "pageshow", function ( event ) {
     var historyTraversal = event.persisted || ( typeof window.performance != "undefined" && window.performance.navigation.type === 2 );
     if ( historyTraversal ) {
-        // Handle page restore.
         window.location.reload();
       }
     });
