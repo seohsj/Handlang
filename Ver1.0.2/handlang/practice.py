@@ -155,6 +155,9 @@ def practice_list(group):
 # video streaming
 @bp.route('/<group>/video_feed')
 def video_feed(group):
+
+#여기에 alphamodel, nummodel집어넣기
+
     target_label = request.args.get('alphabet')
     camera = cv2.VideoCapture(0)
     target_idx_for_predict=SignLanguage.get_label_idx(group, target_label)

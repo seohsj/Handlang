@@ -29,19 +29,21 @@
 
                 <!-- question -->
                 <div class="quiz" style="margin-top:60px; margin-bottom:70px; font-weight: 600; font-size:25px"> {{_('question')}} "{{key.upper()}}" {{_('question_2')}}</div>                
-                <input type="hidden"  name="{{'question'+str(idx)}}" value="{{key}}">
 
+                <input type="hidden"  name="{{'question'+idx|string}}" value="{{key}}">
                 <!-- examples -->
                 <div class="d-flex justify-content-between ">
                     {% for j in range(4) %}
                         <label>
-                            <input type="radio" name="{{'answer'+str(idx)}}" value='{{question_list[key][j]}}'>
-                            <img class="eximg" src="{{img_list[idx][j]}}" alt="{{question_list[key][j]}}">
+                            <input type="radio" name="{{'answer'+idx|string}}" value='{{question_list[key][j]}}'>
+                            {{question_list[key][j]}}
+                            <img class="eximg" src="{{'/static/img/asl_'+question_list[key][j]+ '.png'}}" alt="{{question_list[key][j]}}">
+           
                         </label>
                     {% endfor %}
                 </div>
 
-                <input type="radio" class="hiddenRadioButton" name="{{'answer'+str(idx)}}" style="display:none;" value='-1' checked>
+                <input type="radio" class="hiddenRadioButton" name="{{'answer'+idx|string}}" style="display:none;" value='-1' checked>
 
                 </div>
             {% endfor %}
