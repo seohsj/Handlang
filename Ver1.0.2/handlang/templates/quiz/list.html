@@ -36,14 +36,12 @@
                     {% for j in range(4) %}
                         <label>
                             <input type="radio" name="{{'answer'+idx|string}}" value='{{question_list[key][j]}}'>
-                            {{question_list[key][j]}}
                             <img class="eximg" src="{{'/static/img/asl_'+question_list[key][j]+ '.png'}}" alt="{{question_list[key][j]}}">
            
                         </label>
                     {% endfor %}
                 </div>
-
-                <input type="radio" class="hiddenRadioButton" name="{{'answer'+idx|string}}" style="display:none;" value='-1' checked>
+                <input type="radio" name="{{'answer'+idx|string}}" style="display:none;" value='-1' checked>
 
                 </div>
             {% endfor %}
@@ -60,7 +58,7 @@
 
                 <div class="col  d-flex justify-content-end">
                     <div>
-                        <button class="btn btn-primary" id="submit" type="submit" style="display:none;" >{{_('submit_quiz')}}</button>
+                        <button type="submit" class="btn btn-primary" id="submit" style="display:none;" >{{_('submit_quiz')}}</button>
                         <button type="button" class="btn btn-primary " id="next">→</button>
                     </div>
                 </div>
