@@ -1,55 +1,40 @@
 from flask import render_template, Response, request, redirect, g, session
-from keras.preprocessing.image import load_img, img_to_array
+# from keras.preprocessing.image import load_img, img_to_array
 from keras.models import load_model
 import numpy as np
 import cv2
 import json
 from flask_babel import Babel, gettext
-import tensorflow as tf
-from tensorflow.python.keras.backend import set_session
+# import tensorflow as tf
+# from tensorflow.python.keras.backend import set_session
 from flask import Blueprint
 from .common import SignLanguage
 
 
+
 bp = Blueprint('practice', __name__, url_prefix='/')
-# An exception occurred Tensor Tensor("dense_2/Softmax:0", shape=(?, 29), dtype=float32) is not an element of this graph.
-# https://stackoverflow.com/questions/53391618/tensor-tensorpredictions-softmax0-shape-1000-dtype-float32-is-not-an
-sess = tf.Session()
-graph = tf.get_default_graph()
 
 
-set_session(sess)
-alphamodel = load_model('handlang/model/handlang_model_4.h5')
-numbmodel = load_model('handlang/model/su_adamax.h5')
+predict_label = ''  ##
 
-print("Loaded model from disk")
-
-class PredictLabel(object):
-    def __init__(self, label):
-        self.label = label
-
-    def set_label(self, label):
-        self.label = label
-
-    def get_label(self):
-        return self.label
-
-
-predict_label = PredictLabel('')
-
-
-
-
+# video streaming
+@bp.route('/<group>/video_feed')
+def video_feed(group):
+    target_label = request.args.get('alphabet')
+    camera = cv2.VideoCapture(0)
+    target_idx_for_predict=SignLanguage.get_label_idx(group, target_label)
+    return Response(gen(camera,group,target_idx_for_predict), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 def gen(camera,group,target_idx_for_predict):
-    global alphamodel
-    global numbmodel
+
     if not camera.isOpened():
         raise RuntimeError("Could not start camera")
     if(group=='alphabet'):
-        model=alphamodel
+        print("loadmodel")
+        model = load_model('handlang/model/handlang_model_4.h5')
     else:
-        model = numbmodel
+        print("loadmodel")
+        model = load_model('handlang/model/su_adamax.h5')
 
     while True:
         success, img = camera.read() #이미지를 프레임단위로 잘라
@@ -65,11 +50,7 @@ def gen(camera,group,target_idx_for_predict):
 
 
                 image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
-                global sess
-                global graph
-                with graph.as_default():
-                    set_session(sess)
-                    prediction = model.predict(image)
+                prediction = model.predict(image)
                 print("타겟예측: ", prediction[0][target_idx_for_predict])
                 print("target_idx_for_predict",target_idx_for_predict)
                 print(prediction[0])
@@ -85,14 +66,9 @@ def gen(camera,group,target_idx_for_predict):
                 else:
                     result = ''
 
-
-
-                predict_label.set_label(result)
-                # print("===gen===start")
-                # print(result)
-                # print(predict_label.get_label())
-                # print("===gen===end")
-                # print("\n")
+                global predict_label
+                predict_label=result
+     
                 ret, jpeg = cv2.imencode('.jpg', crop_img)
                 frame = jpeg.tobytes()
 
@@ -111,8 +87,8 @@ def gen(camera,group,target_idx_for_predict):
 @bp.route('/return_label', methods=['POST', 'GET'])
 def return_label():
     value = request.form.get("target", False)
-
-    label = predict_label.get_label()
+    global predict_label
+    label = predict_label
 
     if label == '':
         predict_result = {
@@ -150,19 +126,6 @@ def return_label():
 def practice_list(group):
     alphabet_list = SignLanguage.get_letter_list(group)
     return render_template('practice/practice_list.html',group=group , alphabet_list=alphabet_list, link=request.full_path)
-
-
-# video streaming
-@bp.route('/<group>/video_feed')
-def video_feed(group):
-
-#여기에 alphamodel, nummodel집어넣기
-
-    target_label = request.args.get('alphabet')
-    camera = cv2.VideoCapture(0)
-    target_idx_for_predict=SignLanguage.get_label_idx(group, target_label)
-    return Response(gen(camera,group,target_idx_for_predict), mimetype='multipart/x-mixed-replace; boundary=frame')
-
 
 
 

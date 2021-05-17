@@ -69,7 +69,6 @@ def make_quiz(group):
         questions= random.sample(letter_list, g.number_of_quiz )
     except ValueError:
         print("전체 질문 수(number_of_quiz)가 ", len(letter_list),"를 넘습니다.")  
-        return redirect(url_for('home.index'))  #https://flask.palletsprojects.com/en/2.0.x/errorhandling/
 
     quiz_list={}
     for question in questions:
