@@ -1,12 +1,9 @@
 from flask import render_template, Response, request, redirect, g, session
-# from keras.preprocessing.image import load_img, img_to_array
 from keras.models import load_model
 import numpy as np
 import cv2
 import json
 from flask_babel import Babel, gettext
-# import tensorflow as tf
-# from tensorflow.python.keras.backend import set_session
 from flask import Blueprint
 from .common import SignLanguage
 

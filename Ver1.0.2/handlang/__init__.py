@@ -5,8 +5,7 @@ def create_app():
     app = Flask(__name__)
     babel = Babel(app)
     app.config['lang_code'] = ['en', 'ko']
-    app.secret_key = 'super secret key' #csrf?
-    app.config['SESSION_TYPE'] = 'filesystem'
+    app.secret_key = 'super secret key' 
 
 
     from . import home , practice, language, quiz
@@ -15,15 +14,14 @@ def create_app():
     app.register_blueprint(language.bp)
     app.register_blueprint(home.bp)
 
-
     @babel.localeselector
     def get_locale():
+        print("jj")
         try:
             language = session['language']
         except KeyError:
-            language = None
-        if language is not None:
-            return language
-        return request.accept_languages.best_match(['en', 'ko'])
+            language = request.accept_languages.best_match(['en', 'ko'])
+            session['language']=language
+        return language
 
     return app
